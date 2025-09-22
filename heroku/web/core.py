@@ -39,7 +39,11 @@ from ..tl_cache import CustomTelegramClient
 from . import proxypass, root
 
 logger = logging.getLogger(__name__)
+class IgnorePriUpgrade(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "PRI/Upgrade" not in str(record.getMessage())
 
+logging.getLogger("aiohttp.server").addFilter(IgnorePriUpgrade())
 
 class Web(root.Web):
     def __init__(self, **kwargs):
